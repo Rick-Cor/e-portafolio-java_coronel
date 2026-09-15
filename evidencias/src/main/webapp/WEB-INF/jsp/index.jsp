@@ -9,257 +9,359 @@
     <title>E-Portafolio | Ricardo Coronel</title>
     <style type="text/css">
         :root {
-            /* Paleta de colores moderna y vibrante */
-            --bg-main: #09090b;
-            --bg-secondary: #18181b;
-            --primary: #00f2fe;
-            --secondary: #4facfe;
-            --accent: #8b5cf6;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
+            /* Paleta: azul tinta técnico + acento ámbar, pensada para un
+               portafolio de desarrollo backend / bases de datos */
+            --bg-main: #0e1116;
+            --bg-surface: #151a21;
+            --bg-raised: #1b212a;
+            --border: #262e38;
+            --border-strong: #38424f;
+            --ink: #e9edf2;
+            --ink-dim: #8a96a3;
+            --accent: #f2a65a;
+            --accent-strong: #f7b877;
+            --accent-cool: #6bc2cf;
+            --font-sans: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: var(--font-sans);
             background-color: var(--bg-main);
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(79, 172, 254, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%);
-            color: var(--text-main);
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+            color: var(--ink);
             margin: 0;
             padding: 0;
             line-height: 1.6;
             min-height: 100vh;
         }
 
-        /* Navegación con efecto cristal */
-        .navbar {
-            background: rgba(9, 9, 11, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 1.2rem 5%;
-            border-bottom: 1px solid var(--card-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        a { color: inherit; }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* ---------- Barra superior ---------- */
+        .topbar {
+            background: rgba(14, 17, 22, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        .navbar a { 
-            color: var(--text-main); 
-            text-decoration: none; 
-            font-weight: 600; 
-            letter-spacing: 0.5px; 
-            transition: color 0.3s;
+        .topbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .navbar a:hover { color: var(--primary); }
-        .navbar .admin-link {
-            background: rgba(139, 92, 246, 0.15);
-            color: #c4b5fd;
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+        .brand {
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.02rem;
+            letter-spacing: 0.2px;
+            color: var(--ink);
+        }
+        .brand span {
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-weight: 500;
+        }
+        .admin-link {
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ink-dim);
+            border: 1px solid var(--border-strong);
+            padding: 0.5rem 1.1rem;
+            border-radius: 6px;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .admin-link:hover {
+            color: var(--ink);
+            border-color: var(--accent-cool);
         }
 
-        /* Cabecera con texto en gradiente */
+        /* ---------- Cabecera ---------- */
         .hero {
-            padding: 5rem 5% 3rem;
-            text-align: center;
-        }
-        .hero h1 { 
-            font-size: 3.5rem; 
-            margin: 0 0 1rem 0; 
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-        .hero p { 
-            color: var(--text-muted); 
-            max-width: 600px; 
-            font-size: 1.2rem; 
-            margin: 0 auto; 
-        }
-        
-        /* Layout principal */
-        .container {
-            max-width: 1300px;
+            padding: 4rem 5% 2.5rem;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 2rem 5% 5rem;
+        }
+        .hero-tag {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--accent-cool);
+            margin: 0 0 0.9rem 0;
+        }
+        .hero h1 {
+            font-size: 2.6rem;
+            line-height: 1.2;
+            margin: 0 0 1rem 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            max-width: 20ch;
+        }
+        .hero p {
+            color: var(--ink-dim);
+            max-width: 62ch;
+            font-size: 1.08rem;
+            margin: 0;
+        }
+
+        /* ---------- Layout principal ---------- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 5% 5rem;
             display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 3rem;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
             align-items: start;
         }
-        
-        /* Tarjetas base Glassmorphism */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-        .card h2 { 
-            margin-top: 0; 
-            color: var(--text-main); 
-            font-size: 1.5rem; 
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1.5rem; 
-        }
-        .card h2::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to right, var(--card-border), transparent);
-        }
-        
-        /* Perfil flotante (Sticky) */
-        .profile-section {
+
+        /* ---------- Ficha de perfil ---------- */
+        .profile-card {
             position: sticky;
-            top: 100px;
+            top: 88px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
         }
-        .profile-section p { font-size: 1rem; color: var(--text-muted); line-height: 1.7; }
-        .tag-container { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
-        .tag {
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            color: var(--primary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
+        .profile-card-tab {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--accent);
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.4rem;
+            letter-spacing: 0.3px;
         }
-        .tag:hover {
-            background: rgba(0, 242, 254, 0.2);
-            transform: translateY(-2px);
+        .profile-card-body {
+            padding: 1.6rem 1.4rem 1.8rem;
         }
-        
-        /* Cuadrícula de evidencias dinámica */
-        .evidence-grid {
+        .profile-card-body p {
+            color: var(--ink-dim);
+            font-size: 0.94rem;
+            margin: 0 0 1.5rem 0;
+        }
+        .stack-group {
+            margin-bottom: 1.1rem;
+        }
+        .stack-group:last-child { margin-bottom: 0; }
+        .stack-group dt {
+            font-size: 0.72rem;
+            color: var(--ink-dim);
+            margin-bottom: 0.4rem;
+        }
+        .stack-group dd {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 0.86rem;
+            color: var(--ink);
+            padding-left: 0.85rem;
+            border-left: 2px solid var(--border-strong);
+        }
+
+        /* ---------- Sección de evidencias ---------- */
+        .evidence-section h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 0.3rem 0;
+        }
+        .evidence-section > p {
+            color: var(--ink-dim);
+            font-size: 0.94rem;
+            margin: 0 0 1.5rem 0;
+        }
+
+        .evidence-table {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--bg-surface);
+        }
+        .evidence-row {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: 48px 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.15rem 1.4rem;
+            border-bottom: 1px solid var(--border);
         }
-        .evidence-item {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 1.8rem;
-            border: 1px solid var(--card-border);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            box-sizing: border-box;
+        .evidence-row:last-child { border-bottom: none; }
+
+        .evidence-row.head {
+            background: var(--bg-raised);
+            padding: 0.75rem 1.4rem;
+            font-size: 0.74rem;
+            color: var(--ink-dim);
         }
-        .evidence-item:hover {
-            transform: translateY(-8px);
-            border-color: rgba(79, 172, 254, 0.4);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(79, 172, 254, 0.15);
+
+        .evidence-row.data:hover {
+            background: rgba(242, 166, 90, 0.04);
         }
-        .evidence-item h3 { 
-            margin: 0 0 1rem 0; 
-            font-size: 1.2rem; 
-            color: var(--text-main); 
+        .evidence-row.data:nth-child(even) {
+            background: rgba(255, 255, 255, 0.012);
         }
-        .evidence-item p { 
-            font-size: 0.95rem; 
-            color: var(--text-muted); 
-            margin-bottom: 2rem; 
-            flex-grow: 1; /* Empuja el botón hacia abajo */
+        .evidence-row.data:nth-child(even):hover {
+            background: rgba(242, 166, 90, 0.045);
         }
-        
-        /* Botones con gradiente */
+
+        .row-index {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--ink-dim);
+            text-align: right;
+        }
+
+        .row-content h3 {
+            margin: 0 0 0.35rem 0;
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+        .row-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--ink-dim);
+            max-width: 60ch;
+        }
+
+        .row-action {
+            white-space: nowrap;
+        }
         .btn {
             display: inline-block;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            color: #000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
+            background: transparent;
+            color: var(--accent-strong);
+            border: 1px solid var(--accent);
+            padding: 0.55rem 1.1rem;
+            border-radius: 6px;
             text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 0.86rem;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .btn:hover {
+            background: var(--accent);
+            color: #16130d;
+        }
+
+        .empty-state {
+            padding: 3rem 1.4rem;
             text-align: center;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            box-sizing: border-box;
+            color: var(--ink-dim);
+            font-size: 0.95rem;
         }
-        .btn:hover { 
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); 
-            transform: scale(1.02);
-            color: #000;
-        }
-        
-        @media (max-width: 960px) {
+
+        @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; }
-            .profile-section { position: relative; top: 0; }
-            .hero h1 { font-size: 2.5rem; }
+            .profile-card { position: relative; top: 0; }
+            .hero h1 { font-size: 2.1rem; }
+
+            .evidence-row.head { display: none; }
+            .evidence-row.data {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+                padding: 1.2rem 1.3rem;
+            }
+            .row-index { text-align: left; }
+            .row-action .btn { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <a href="/">Ricardo Coronel</a>
-        <a href="/login" class="admin-link">Panel Admin &rarr;</a>
+    <div class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="/">Ricardo Coronel <span>/portafolio</span></a>
+            <a href="/login" class="admin-link">Acceder al panel</a>
+        </div>
     </div>
 
-    <div class="hero">
-        <h1>E-Portafolio Académico</h1>
-        <p>Documentación y evidencias de aprendizaje desplegadas dinámicamente</p>
-    </div>
+    <header class="hero">
+        <p class="hero-tag">-- registro de evidencias de aprendizaje</p>
+        <h1>E-Portafolio académico</h1>
+        <p>Documentación técnica de proyectos y evidencias, servida dinámicamente desde una base de datos relacional.</p>
+    </header>
 
     <div class="container">
-        
-        <!-- Columna Izquierda: Perfil (Ahora es sticky) -->
-        <div class="card profile-section">
-            <h2>Perfil Técnico</h2>
-            <p>Apasionado por el desarrollo web y la creación de soluciones tecnológicas escalables con bases de datos relacionales, construyendo sobre sólidas bases de desarrollo web.</p>
-            
-            <div class="tag-container">
-                <span class="tag">Java 21</span>
-                <span class="tag">Spring Boot</span>
-                <span class="tag">MVC</span>
-                <span class="tag">PHP</span>
-                <span class="tag">MySQL</span>
-                <span class="tag">Git / GitHub</span>
-            </div>
-        </div>
 
-        <!-- Columna Derecha: Evidencias -->
-        <div class="card">
-            <h2>Repositorio de Evidencias</h2>
-            
-            <div class="evidence-grid">
-                <!-- BUCLE DINÁMICO JSTL -->
-                <!-- Este bloque iterará sobre la lista "evidencias" enviada por tu Controlador -->
-                <c:forEach items="${evidencias}" var="item">
-                    <div class="evidence-item">
-                        <h3>${item.titulo}</h3>
-                        <p>${item.descripcion}</p>
-                        <a href="${item.imagenUrl}" target="_blank" class="btn">Visualizar Detalle</a>
-                    </div>
-                </c:forEach>
-                
-                <!-- Mensaje por si la base de datos está vacía -->
-                <c:if test="${empty evidencias}">
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
-                        <p>No hay evidencias registradas en la base de datos en este momento.</p>
+        <!-- Columna izquierda: perfil -->
+        <aside class="profile-card">
+            <div class="profile-card-tab">perfil.técnico</div>
+            <div class="profile-card-body">
+                <p>Desarrollador enfocado en soluciones web escalables sobre bases de datos relacionales, con base sólida en desarrollo backend y frontend.</p>
+
+                <dl class="stack-group">
+                    <dt>Lenguajes</dt>
+                    <dd>Java 21 &middot; PHP</dd>
+                </dl>
+                <dl class="stack-group">
+                    <dt>Frameworks &amp; patrones</dt>
+                    <dd>Spring Boot &middot; MVC</dd>
+                </dl>
+                <dl class="stack-group">
+                    <dt>Base de datos</dt>
+                    <dd>MySQL</dd>
+                </dl>
+                <dl class="stack-group">
+                    <dt>Herramientas</dt>
+                    <dd>Git / GitHub</dd>
+                </dl>
+            </div>
+        </aside>
+
+        <!-- Columna derecha: evidencias -->
+        <section class="evidence-section">
+            <h2>Evidencias registradas</h2>
+            <p>Cada fila corresponde a un registro almacenado en la base de datos.</p>
+
+            <div class="evidence-table" role="table">
+
+                <c:if test="${not empty evidencias}">
+                    <div class="evidence-row head" role="row">
+                        <span role="columnheader">#</span>
+                        <span role="columnheader">Evidencia</span>
+                        <span role="columnheader">Acción</span>
                     </div>
                 </c:if>
+
+                <!-- BUCLE DINÁMICO JSTL -->
+                <c:forEach items="${evidencias}" var="item" varStatus="loop">
+                    <div class="evidence-row data" role="row">
+                        <span class="row-index" role="cell">${loop.index + 1}</span>
+                        <div class="row-content" role="cell">
+                            <h3>${item.titulo}</h3>
+                            <p>${item.descripcion}</p>
+                        </div>
+                        <div class="row-action" role="cell">
+                            <a href="${item.imagenUrl}" target="_blank" rel="noopener noreferrer" class="btn">Ver evidencia</a>
+                        </div>
+                    </div>
+                </c:forEach>
+
+                <c:if test="${empty evidencias}">
+                    <div class="empty-state">
+                        Aún no hay evidencias registradas. Cuando agregues registros desde el panel, aparecerán aquí.
+                    </div>
+                </c:if>
+
             </div>
-        </div>
+        </section>
 
     </div>
 
