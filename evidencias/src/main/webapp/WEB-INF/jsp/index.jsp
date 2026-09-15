@@ -44,7 +44,6 @@
         .hero h1 { font-size: 2.8rem; margin: 0 0 0.5rem 0; color: #ffffff; }
         .hero p { color: var(--text-muted); max-width: 600px; font-size: 1.1rem; margin: 0; }
         
-        /* Implementación de CSS Grid para un layout asimétrico moderno */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -148,24 +147,49 @@
         <div class="card">
             <h2>Repositorio de Evidencias</h2>
             
+            <!-- Aquí inicia la cuadrícula que acomoda todo automáticamente -->
             <div class="evidence-grid">
+                
                 <div class="evidence-item">
                     <h3>Semana 1: Fundamentos Web</h3>
                     <p>Análisis y estructuración de los pilares principales para la planificación y despliegue de aplicaciones web modernas, abarcando desde la arquitectura cliente-servidor hasta el diseño de bases de datos.</p>
-                    
-                    <!-- Extensión corregida a .png -->
                     <a href="/evidencias/Infografia1(Fundamentos web).png" target="_blank" class="btn">Visualizar Infografía</a>
                 </div>
                 
-                <!-- Espacio preparado para la Semana 2 -->
-                <div class="evidence-item" style="opacity: 0.5; border-style: dashed;">
-                    <h3>Semana 2: Próximamente</h3>
-                    <p>Espacio reservado para la siguiente asignación académica.</p>
+                <div class="evidence-item">
+                    <h3>Semana 2: Infografía 1</h3>
+                    <p>Tipos de proyecto web</p>
+                    <a href="/evidencias/infosem2.1.jpg" target="_blank" class="btn">Visualizar Infografía</a>
                 </div>
+
+                <div class="evidence-item">
+                    <h3>Semana 2: Infografía 2</h3>
+                    <p>Actores de un proyecto web</p>
+                    <a href="/evidencias/infosem2.2.jpg" target="_blank" class="btn">Visualizar Infografía</a>
+                </div>
+
+                <div class="evidence-item">
+                    <h3>Semana 2: Infografía 3</h3>
+                    <p>Roles y responsabilidades</p>
+                    <a href="/evidencias/infosem2.3.jpeg" target="_blank" class="btn">Visualizar Infografía</a>
+                </div>
+
+                <div class="evidence-item">
+                    <h3>Semana 2: Infografía 4</h3>
+                    <p>Organización del tipo de trabajo.</p>
+                    <a href="/evidencias/infosem2.4.jpg" target="_blank" class="btn">Visualizar Infografía</a>
+                </div>
+
+                <div class="evidence-item">
+                    <h3>Semana 2: Infografía 5</h3>
+                    <p>Herramientas de gestión de un proyecto web.</p>
+                    <a href="/evidencias/infosem2.5.jpg" target="_blank" class="btn">Visualizar Infografía</a>
+                </div>
+
             </div>
         </div>
 
     </div>
 
 </body>
-</html> 
+</html>
