@@ -17,8 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Comparator;
 
 @Controller
 public class PortafolioController {
@@ -29,26 +29,30 @@ public class PortafolioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // --- NUEVO: Método auxiliar privado para ordenar las tarjetas por número de semana ---
-    private void ordenarEvidencias(List<Evidencia> lista) {
-        lista.sort((a, b) -> {
-            // Extraemos solo los números. Si el campo es nulo, lo manejamos como vacío.
-            String numeroA = a.getSemana() != null ? a.getSemana().replaceAll("[^0-9]", "") : "";
-            String numeroB = b.getSemana() != null ? b.getSemana().replaceAll("[^0-9]", "") : "";
+    // --- Método auxiliar para ordenar las tarjetas de forma segura extrayendo el número de semana ---
+    private List<Evidencia> ordenarEvidenciasSeguro(List<Evidencia> listaOriginal) {
+        // Creamos una nueva lista modificable para evitar errores de inmutabilidad desde TiDB
+        List<Evidencia> listaModificable = new ArrayList<>(listaOriginal);
+        
+        listaModificable.sort((a, b) -> {
+            // Extraemos solo los números. Si el campo es nulo, lo manejamos como un string "0".
+            String numeroA = (a.getSemana() != null) ? a.getSemana().replaceAll("[^0-9]", "") : "0";
+            String numeroB = (b.getSemana() != null) ? b.getSemana().replaceAll("[^0-9]", "") : "0";
             
             int numA = numeroA.isEmpty() ? 0 : Integer.parseInt(numeroA);
             int numB = numeroB.isEmpty() ? 0 : Integer.parseInt(numeroB);
             
             return Integer.compare(numA, numB);
         });
+        
+        return listaModificable;
     }
 
     // Página principal pública
     @GetMapping("/")
     public String inicio(Model model) {
-        List<Evidencia> listaEvidencias = evidenciaRepository.findAll();
-        ordenarEvidencias(listaEvidencias); // Aplicamos el ordenamiento aquí
-        model.addAttribute("evidencias", listaEvidencias);
+        List<Evidencia> listaOrdenada = ordenarEvidenciasSeguro(evidenciaRepository.findAll());
+        model.addAttribute("evidencias", listaOrdenada);
         return "index";
     }
 
@@ -79,14 +83,16 @@ public class PortafolioController {
         if (usuario == null) {
             return "redirect:/login"; // Si no ha iniciado sesión, lo devuelve al login
         }
-        List<Evidencia> listaEvidencias = evidenciaRepository.findAll();
-        ordenarEvidencias(listaEvidencias); // Aplicamos el ordenamiento en el panel también
+        
+        // Aplicamos el mismo ordenamiento a la vista del panel
+        List<Evidencia> listaOrdenada = ordenarEvidenciasSeguro(evidenciaRepository.findAll());
+        
         model.addAttribute("usuario", usuario);
-        model.addAttribute("evidencias", listaEvidencias);
+        model.addAttribute("evidencias", listaOrdenada);
         return "dashboard";
     }
 
-    // --- NUEVO: Procesar la subida de archivos y nuevos registros (Protegido por sesión) ---
+    // Procesar la subida de archivos y nuevos registros (Protegido por sesión)
     @PostMapping("/dashboard/subir")
     public String guardarEvidencia(@ModelAttribute Evidencia evidencia, @RequestParam("archivo") MultipartFile archivo, HttpSession session) {
         // Verificar que el usuario tenga sesión iniciada por seguridad

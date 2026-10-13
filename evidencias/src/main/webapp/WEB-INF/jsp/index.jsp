@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
@@ -538,7 +537,7 @@
 
             gap: 20px;
 
-            margin-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
         }
 
 
@@ -598,17 +597,37 @@
                 1px solid #ddd6fe;
         }
 
-
         /* =========================================================
-           EVIDENCE LIST
+           GRID & GROUPING (NUEVOS ESTILOS)
         ========================================================= */
 
-        .evidence-list {
+        .semana-group {
+            margin-bottom: 3.5rem;
+        }
+
+        .titulo-separador {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 0.6rem;
             display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-            flex-direction: column;
+        .titulo-separador::before {
+            content: "📅";
+            font-size: 1.2rem;
+            filter: grayscale(20%) hue-rotate(240deg);
+        }
 
-            gap: 1rem;
+        .cuadricula-tarjetas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
         }
 
 
@@ -621,11 +640,12 @@
 
             display: flex;
 
-            align-items: center;
+            align-items: flex-start;
+            flex-direction: column;
 
-            gap: 1.5rem;
+            gap: 1.2rem;
 
-            padding: 1.35rem;
+            padding: 1.5rem;
 
             background: var(--surface);
 
@@ -642,6 +662,8 @@
                 transform .25s ease,
                 box-shadow .25s ease,
                 border-color .25s ease;
+            
+            height: 100%;
         }
 
 
@@ -676,20 +698,27 @@
 
 
         /* =========================================================
-           EVIDENCE ICON
+           EVIDENCE ICON & INFO
         ========================================================= */
+
+        .card-header-flex {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
 
         .evidence-icon {
             flex-shrink: 0;
 
-            width: 54px;
-            height: 54px;
+            width: 48px;
+            height: 48px;
 
             display: grid;
 
             place-items: center;
 
-            border-radius: 14px;
+            border-radius: 12px;
 
             color: var(--primary);
 
@@ -705,26 +734,12 @@
             font-weight: 900;
         }
 
-
-        /* =========================================================
-           EVIDENCE INFO
-        ========================================================= */
-
-        .evidence-info {
-            flex: 1;
-
-            min-width: 0;
-        }
-
-
         .evidence-meta {
             display: inline-flex;
 
             padding:
                 .3rem
                 .6rem;
-
-            margin-bottom: .45rem;
 
             border-radius: 6px;
 
@@ -742,14 +757,24 @@
         }
 
 
+        .evidence-info {
+            flex: 1;
+
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+
         .evidence-info h4 {
-            margin: 0 0 .4rem;
+            margin: 0 0 .6rem;
 
             color: var(--text-main);
 
             font-size: 1.05rem;
 
-            line-height: 1.35;
+            line-height: 1.4;
         }
 
 
@@ -761,6 +786,8 @@
             font-size: .88rem;
 
             line-height: 1.55;
+            
+            flex-grow: 1;
         }
 
 
@@ -777,7 +804,8 @@
 
             gap: 7px;
 
-            flex-shrink: 0;
+            width: 100%;
+            margin-top: auto;
 
             padding:
                 .72rem
@@ -794,7 +822,7 @@
                     var(--secondary)
                 );
 
-            font-size: .82rem;
+            font-size: .85rem;
 
             font-weight: 800;
 
@@ -830,6 +858,7 @@
 
         .empty-state {
             padding: 4rem 2rem;
+            grid-column: 1 / -1;
 
             text-align: center;
 
@@ -911,25 +940,9 @@
 
                 flex-direction: column;
             }
-
-
-            .evidence-card {
-                flex-direction: column;
-
-                align-items: flex-start;
-
-                padding: 1.2rem;
-            }
-
-
-            .evidence-icon {
-                width: 48px;
-                height: 48px;
-            }
-
-
-            .btn-view {
-                width: 100%;
+            
+            .cuadricula-tarjetas {
+                grid-template-columns: 1fr;
             }
 
         }
@@ -1162,91 +1175,88 @@
         </div>
 
 
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+        <c:if test="${empty evidencias}">
+            <div class="empty-state">
+                <div class="empty-icon">📂</div>
+                <strong>No hay evidencias registradas</strong>
+                <span>Las evidencias aparecerán aquí cuando sean agregadas al sistema.</span>
+            </div>
+        </c:if>
 
-        <div class="evidence-list">
+        <!-- =================================================
+             EVIDENCE DYNAMIC GRID LOOP
+        ================================================== -->
+        <div class="evidence-container">
+        
+            <c:set var="semanaActual" value="" />
+            
+            <c:forEach items="${evidencias}" var="item">
+            
+                <!-- Detectar si cambiamos de semana para crear un nuevo bloque -->
+                <c:if test="${item.semana != semanaActual}">
+                    
+                    <!-- Si la variable ya tiene datos, cerramos los divs de la semana anterior -->
+                    <c:if test="${not empty semanaActual}">
+                        </div> <!-- Cierra cuadricula-tarjetas -->
+                        </div> <!-- Cierra semana-group -->
+                    </c:if>
+                    
+                    <!-- Abre la nueva semana -->
+                    <div class="semana-group">
+                        <h3 class="titulo-separador">${item.semana}</h3>
+                        <div class="cuadricula-tarjetas">
+                        
+                    <c:set var="semanaActual" value="${item.semana}" />
+                </c:if>
 
-
-            <!-- =================================================
-                 EMPTY STATE
-            ================================================== -->
-
-            <c:if test="${empty evidencias}">
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        📂
-                    </div>
-
-                    <strong>
-                        No hay evidencias registradas
-                    </strong>
-
-                    <span>
-                        Las evidencias aparecerán aquí cuando
-                        sean agregadas al sistema.
-                    </span>
-
-                </div>
-
-            </c:if>
-
-
-
-            <!-- =================================================
-                 EVIDENCE LOOP
-            ================================================== -->
-
-            <c:forEach
-                    items="${evidencias}"
-                    var="item">
-
+                <!-- =================================================
+                     EVIDENCE CARD
+                ================================================== -->
                 <article class="evidence-card">
 
-
-                    <div class="evidence-icon">
-                        📄
-                    </div>
-
-
-                    <div class="evidence-info">
-
+                    <div class="card-header-flex">
+                        <div class="evidence-icon">
+                            📄
+                        </div>
                         <span class="evidence-meta">
                             ${item.semana}
                         </span>
+                    </div>
 
-
+                    <div class="evidence-info">
                         <h4>
                             ${item.titulo}
                         </h4>
 
-
                         <p>
                             ${item.descripcion}
                         </p>
-
                     </div>
-
 
                     <a
                         href="${item.imagenUrl}"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="btn-view">
-
                         Ver evidencia
-
                     </a>
 
                 </article>
 
             </c:forEach>
-
-
+            
+            <!-- Cerramos los divs de la última semana al finalizar el bucle -->
+            <c:if test="${not empty evidencias}">
+                </div> <!-- Cierra cuadricula-tarjetas -->
+                </div> <!-- Cierra semana-group -->
+            </c:if>
+            
         </div>
 
     </section>
-
 
 </main>
 
@@ -1254,4 +1264,3 @@
 </body>
 
 </html>
-```
