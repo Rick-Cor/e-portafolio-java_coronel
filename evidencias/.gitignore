@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker / variables de entorno ###
+.env
+
+### Credenciales de TiDB para mysqldump ###
+tidb.cnf
+
+### Respaldos de base de datos (contienen datos sensibles) ###
+backup_*.sql

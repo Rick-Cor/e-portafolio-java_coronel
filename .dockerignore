@@ -1,0 +1,12 @@
+.git/
+.vscode/
+evidencias/target/
+evidencias/frontend/
+evidencias/node_modules/
+evidencias/.mvn/
+evidencias/mvnw
+evidencias/mvnw.cmd
+evidencias/.env*
+evidencias/*.cnf
+evidencias/*.sql
+evidencias/docker/

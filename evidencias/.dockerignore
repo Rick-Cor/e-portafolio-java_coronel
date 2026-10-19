@@ -1,0 +1,22 @@
+# Solo se necesitan pom.xml y src/ para construir la imagen
+target/
+frontend/
+node_modules/
+.mvn/
+mvnw
+mvnw.cmd
+.git/
+.gitignore
+.gitattributes
+.idea/
+.vscode/
+*.iml
+.env
+.env.*
+*.cnf
+*.sql
+docker-compose*.yml
+docker/
+Dockerfile
+.dockerignore
+HELP.md

@@ -1,0 +1,58 @@
+# =============================================================================
+#  Entorno LOCAL de pruebas: App Spring Boot + MySQL 8.0 (compatible con TiDB)
+#  Uso:  docker compose up -d --build
+# =============================================================================
+name: portafolio
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: portafolio-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_local_123}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-portafolio_bd}
+      MYSQL_USER: ${MYSQL_USER:-portafolio}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-portafolio_local_123}
+      TZ: UTC
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      # 3307 en el host para no chocar con un MySQL/XAMPP local en 3306
+      - "${MYSQL_HOST_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # -h 127.0.0.1 fuerza TCP: no responde hasta que termina la inicialización
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: portafolio-app:local
+    container_name: portafolio-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-portafolio_bd}?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-portafolio}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-portafolio_local_123}
+      SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL:-true}
+    ports:
+      - "${APP_HOST_PORT:-8080}:8080"
+    volumes:
+      # Persiste los archivos subidos desde el dashboard
+      - uploads:/app/src/main/resources/static/evidencias
+
+volumes:
+  mysql_data:
+  uploads:
